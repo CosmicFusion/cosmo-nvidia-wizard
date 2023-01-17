@@ -57,7 +57,7 @@ class Application:
                     ret = f(*args, **kwargs)
                     finished()
                     return ret
-            return decorate
+                return decorate
             
             @call_finished_after
             def install():
