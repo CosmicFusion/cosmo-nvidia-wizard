@@ -6,9 +6,9 @@ import os, subprocess, time, threading
 
 
 
-nvgpupresent = subprocess.run(["/home/ward/Downloads/test3/gpu-utils detecthw"], shell=True)
-nvkernmodpresent = subprocess.run(["/home/ward/Downloads/test3/gpu-utils detectdriver"], shell=True)
-nvgpuname = subprocess.check_output(["/home/ward/Downloads/test3/gpu-utils getname"], stderr=subprocess.STDOUT, shell=True)
+nvgpupresent = subprocess.run(["/home/ward/projects/nobara/cosmo-nvidia-wizard/gpu-utils detecthw"], shell=True)
+nvkernmodpresent = subprocess.run(["/home/ward/projects/nobara/cosmo-nvidia-wizard/gpu-utils detectdriver"], shell=True)
+nvgpuname = subprocess.check_output(["/home/ward/projects/nobara/cosmo-nvidia-wizard/gpu-utils getname"], stderr=subprocess.STDOUT, shell=True)
 nvdriverpresent = subprocess.run(["rpm -q nvidia-driver"], shell=True)
 
 class Application(Gtk.ApplicationWindow):
@@ -21,7 +21,7 @@ class Application(Gtk.ApplicationWindow):
         application_id="cosmo.nvidia.wizard"
         
         self.builder = Gtk.Builder()
-        self.builder.add_from_file("/home/ward/Downloads/test3/main.ui")
+        self.builder.add_from_file("/home/ward/projects/nobara/cosmo-nvidia-wizard/main.ui")
         self.builder.connect_signals(self)
         
         self.window = self.builder.get_object("main_window")
@@ -71,7 +71,7 @@ class Application(Gtk.ApplicationWindow):
             def on_btn_accept_pressed(self, widget):
                 self.builder.get_object("main_window").set_visible(False)
                 def install():
-                    os.system("python3 /home/ward/Downloads/test3/process.py install")    
+                    os.system("python3 /home/ward/projects/nobara/cosmo-nvidia-wizard/process.py install")    
                 t1 = threading.Thread(target=install)
                 t1.start()
                 Gtk.main_quit()
@@ -79,7 +79,7 @@ class Application(Gtk.ApplicationWindow):
             if (nvdriverpresent.returncode) == 0:
                 self.builder.get_object("main_window").set_visible(False)
                 def install():
-                    os.system("python3 /home/ward/Downloads/test3/process.py remove")    
+                    os.system("python3 /home/ward/projects/nobara/cosmo-nvidia-wizard/process.py remove")    
                 t1 = threading.Thread(target=install)
                 t1.start()
                 Gtk.main_quit()

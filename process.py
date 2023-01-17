@@ -2,17 +2,23 @@ import gi
 gi.require_version("Gtk", "3.0")
 gi.require_version("Vte", "2.91")
 from gi.repository import Gtk, GObject, Vte, GLib
-import os, subprocess, time, threading
-    
+import os, subprocess, time, threading, sys
+
+print(sys.argv[1])
+nvgpuname = subprocess.check_output(["/home/ward/Downloads/test3/gpu-utils getname"], stderr=subprocess.STDOUT, shell=True)
+
+def run_after(f_after):
+    def wrapper(f):
+        def wrapped(*args, **kwargs):
+            ret = f(*args, **kwargs)
+            f_after()
+            return ret
+        return wrapped
+    return wrapper
+
 class Application:
     ### MAIN WINDOW ###
     def __init__(self):
-        
-        
-        
-        #self.nvgpupresent = subprocess.run(["/home/ward/Downloads/test3/gpu-utils detecthw"], shell=True)
-        #self.nvkernmodpresent = subprocess.run(["/home/ward/Downloads/test3/gpu-utils detectdriver"], shell=True)
-        self.nvgpuname = subprocess.check_output(["/home/ward/Downloads/test3/gpu-utils getname"], stderr=subprocess.STDOUT, shell=True)
         
         self.column_names = False
         self.drop_nan = False
@@ -52,13 +58,26 @@ class Application:
         win.connect("destroy", Gtk.main_quit)
         win.show_all()
         
-        def jaj():
-            self.command1 = "echo \"Sending this command to a virtual terminal.\"\n"
-            print("jaj")
-            self.terminal.feed_child(self.command1.encode("utf-8"))
-            self.progress_bar.pulse()
-            self.progress_bar.set_pulse_step(100.0)
-        jaj()
+        self.topbar_text.set_label(f"Installing driver for {nvgpuname.decode('ascii')}")
+        
+        if (sys.argv[1]) == "install":
+            def install():
+                self.progress_bar.pulse()
+                self.progress_bar.set_pulse_step(100.0)
+                self.command1 = "echo \"Sending this command to a virtual terminal.\"\n"
+                self.terminal.feed_child(self.command1.encode("utf-8"))
+                self.command2 = "echo \"Sending this command to a virtual terminal.\"\n"
+                self.terminal.feed_child(self.command2.encode("utf-8"))
+                self.command3 = "echo \"Sending this command to a virtual terminal.\"\n"
+                self.terminal.feed_child(self.command3.encode("utf-8"))
+                self.command4 = "echo \"Sending this command to a virtual terminal.\"\n"
+                self.terminal.feed_child(self.command4.encode("utf-8"))
+                self.command5 = "echo \"Sending this command to a virtual terminal.\"\n"
+                self.terminal.feed_child(self.command5.encode("utf-8"))      
+            install()
+            def finished():
+                os.system("/home/ward/projects/nobara/cosmo-nvidia-wizard/reboot.sh")
+            finished()
  
 Application()
 Gtk.main()
