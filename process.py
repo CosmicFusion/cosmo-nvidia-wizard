@@ -2,19 +2,10 @@ import gi
 gi.require_version("Gtk", "3.0")
 gi.require_version("Vte", "2.91")
 from gi.repository import Gtk, GObject, Vte, GLib
-import os, subprocess, time, threading, sys
+import os, subprocess, time, threading, sys, decorate
 
 print(sys.argv[1])
 nvgpuname = subprocess.check_output(["/home/ward/Downloads/test3/gpu-utils getname"], stderr=subprocess.STDOUT, shell=True)
-
-def run_after(f_after):
-    def wrapper(f):
-        def wrapped(*args, **kwargs):
-            ret = f(*args, **kwargs)
-            f_after()
-            return ret
-        return wrapped
-    return wrapper
 
 class Application:
     ### MAIN WINDOW ###
@@ -60,7 +51,15 @@ class Application:
         
         self.topbar_text.set_label(f"Installing driver for {nvgpuname.decode('ascii')}")
         
-        if (sys.argv[1]) == "install":
+        if (sys.argv[1]) == "install": 
+            def call_finished_after(f):
+                def decorate(*args, **kwargs):
+                    ret = f(*args, **kwargs)
+                    finished()
+                    return ret
+            return decorate
+            
+            @call_finished_after
             def install():
                 self.progress_bar.pulse()
                 self.progress_bar.set_pulse_step(100.0)
@@ -73,11 +72,11 @@ class Application:
                 self.command4 = "echo \"Sending this command to a virtual terminal.\"\n"
                 self.terminal.feed_child(self.command4.encode("utf-8"))
                 self.command5 = "echo \"Sending this command to a virtual terminal.\"\n"
-                self.terminal.feed_child(self.command5.encode("utf-8"))      
+                self.terminal.feed_child(self.command5.encode("utf-8"))
             install()
-            def finished():
-                os.system("/home/ward/projects/nobara/cosmo-nvidia-wizard/reboot.sh")
-            finished()
+
+            
+            
  
 Application()
 Gtk.main()
