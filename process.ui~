@@ -143,7 +143,6 @@ Would you like to reboot now?</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <signal name="pressed" handler="on_action_accept_pressed" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -158,7 +157,6 @@ Would you like to reboot now?</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <signal name="pressed" handler="on_action_decline_pressed" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>

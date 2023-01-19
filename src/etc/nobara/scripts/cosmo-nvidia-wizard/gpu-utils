@@ -1,6 +1,6 @@
-#! /bin/bash
-nvgpu=$(lspci -D | grep -iE 'VGA|3D|DISPLAY' | grep -i amd | cut -d ":" -f 4)
-nvkernmod=$(lspci -kD | grep -iEA3 '^[[:alnum:]]{4}:[[:alnum:]]{2}:[[:alnum:]]{2}.*VGA|3D' | grep -iA3 nvidia | grep -i 'kernel driver' | grep -iE 'amd')
+#! /usr/bin/bash
+nvgpu=$(lspci -D | grep -iE 'VGA|3D|DISPLAY' | grep -i nvidia | cut -d ":" -f 4)
+nvkernmod=$(lspci -kD | grep -iEA3 '^[[:alnum:]]{4}:[[:alnum:]]{2}:[[:alnum:]]{2}.*VGA|3D' | grep -iA3 nvidia | grep -i 'kernel driver' | grep -iE 'vfio-pci|nvidia')
 
 if [[ $1 = 'detecthw' ]]; then
 	if [[ ! -z $nvgpu ]]; then
