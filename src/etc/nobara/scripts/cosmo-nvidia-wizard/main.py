@@ -54,8 +54,10 @@ class Application(Gtk.ApplicationWindow):
                 def accept():
                     os.system("zenity --info --title=NVIDIA GPU Setup Wizard' --width=600 --text='We will not ask again until your next reboot.'")
             else:
-                self.center_text.set_label("Your NVIDIA GPU is fully setup and ready to GO!\nNo further action is required!")
+                self.center_text.set_label("Your NVIDIA GPU is fully setup and ready to GO!\nNo further action is required!\nAre trying to remove them?")
                 self.status_logo.set_from_icon_name("nvidia", 64)
+                self.btn_decline.set_sensitive(True)
+                self.btn_accept.set_sensitive(True) 
         else:
                 if (nvdriverpresent.returncode) == 0:
                     self.center_text.set_label("We have Detected the NVIDIA GPU Driver on your system\nBut not an NVIDIA GPU\nWould you like to remove it?")
@@ -74,6 +76,14 @@ class Application(Gtk.ApplicationWindow):
                 self.builder.get_object("main_window").set_visible(False)
                 def install():
                     os.system("python3 /etc/nobara/scripts/cosmo-nvidia-wizard/process.py install")    
+                t1 = threading.Thread(target=install)
+                t1.start()
+                Gtk.main_quit()
+        else:
+            def on_btn_accept_pressed(self, widget):
+                self.builder.get_object("main_window").set_visible(False)
+                def install():
+                    os.system("python3 /etc/nobara/scripts/cosmo-nvidia-wizard/process.py remove")    
                 t1 = threading.Thread(target=install)
                 t1.start()
                 Gtk.main_quit()

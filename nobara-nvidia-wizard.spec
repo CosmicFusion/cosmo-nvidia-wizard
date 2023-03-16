@@ -1,7 +1,7 @@
 BuildArch:              noarch
 
 Name:          nobara-nvidia-wizard
-Version:       1.0
+Version:       1.1
 Release:       1%{?dist}
 License:       GPLv2
 Group:         System Environment/Libraries
